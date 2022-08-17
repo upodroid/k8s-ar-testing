@@ -15,3 +15,11 @@ terraform {
     }
   }
 }
+
+provider "google" {
+  project = "coen-mahamed-ali"
+}
+
+provider "google-beta" {
+  project = "coen-mahamed-ali"
+}

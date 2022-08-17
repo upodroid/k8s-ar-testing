@@ -19,6 +19,7 @@ metadata:
 spec:
   template:
     spec:
+      restartPolicy: Never
       serviceAccountName: image-promoter
       containers:
         - name: promoter
@@ -28,11 +29,10 @@ spec:
           args:
             - -c
             - |
-              apt update && apt install parallel -qqy
               go install sigs.k8s.io/promo-tools/v3/cmd/kpromo@latest
               git clone https://github.com/upodroid/k8s-ar-testing.git /tmp/k8s.io
               kpromo cip \
-                --thin-manifest-dir=/tmp/k8s.io/k8s.gcr.io
-                --signer-account=krel-trust@coen-mahamed-ali.iam.gserviceaccount.com 
+                --thin-manifest-dir=/tmp/k8s.io/k8s.gcr.io \
+                --signer-account=krel-trust@coen-mahamed-ali.iam.gserviceaccount.com \
+                --log-level=trace \
                 --confirm
-
