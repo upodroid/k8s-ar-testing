@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: k8s
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    iam.gke.io/gcp-service-account: k8s-infra-gcr-promoter@coen-mahamed-ali.iam.gserviceaccount.com
+  name: image-promoter
+  namespace: k8s
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: image-promoter
+  namespace: k8s
+spec:
+  template:
+    spec:
+      serviceAccountName: image-promoter
+      containers:
+        - name: promoter
+          image: golang
+          command:
+            - /bin/bash
+          args:
+            - -c
+            - |
+              apt update && apt install parallel -qqy
+              go install sigs.k8s.io/promo-tools/v3/cmd/kpromo@latest
+              git clone https://github.com/upodroid/k8s-ar-testing.git /tmp/k8s.io
+              kpromo cip \
+                --thin-manifest-dir=/tmp/k8s.io/k8s.gcr.io
+                --signer-account=krel-trust@coen-mahamed-ali.iam.gserviceaccount.com 
+                --confirm
+

@@ -1,0 +1,8 @@
+# google group for gcr.io/k8s-staging-experimental is k8s-infra-staging-experimental@kubernetes.io
+registries:
+- name: gcr.io/k8s-staging-experimental
+  src: true
+- name: europe-west1-docker.pkg.dev/coen-mahamed-ali/images/experimental
+  service-account: k8s-infra-gcr-promoter@coen-mahamed-ali.iam.gserviceaccount.com
+- name: europe-west2-docker.pkg.dev/coen-mahamed-ali/images/experimental
+  service-account: k8s-infra-gcr-promoter@coen-mahamed-ali.iam.gserviceaccount.com
