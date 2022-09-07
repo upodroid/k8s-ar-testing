@@ -29,7 +29,18 @@ spec:
           args:
             - -c
             - |
-              go install sigs.k8s.io/promo-tools/v3/cmd/kpromo@latest
+              # go install sigs.k8s.io/promo-tools/v3/cmd/kpromo@latest
+              export PATH=/google-cloud-sdk/bin:/workspace:$PATH
+              wget -q https://dl.google.com/dl/cloudsdk/channels/rapid/google-cloud-sdk.tar.gz
+              tar xzf google-cloud-sdk.tar.gz -C /
+              /google-cloud-sdk/install.sh \
+                  --disable-installation-options \
+                  --bash-completion=false \
+                  --path-update=false \
+                  --usage-reporting=false
+              gcloud auth configure-docker europe-west2-docker.pkg.dev,europe-west1-docker.pkg.dev -q
+              git clone -b add-client https://github.com/upodroid/promo-tools.git /tmp/kpromo
+              cd /tmp/kpromo && make install
               git clone https://github.com/upodroid/k8s-ar-testing.git /tmp/k8s.io
               kpromo cip \
                 --thin-manifest-dir=/tmp/k8s.io/k8s.gcr.io \
